@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState, useEffect, useRef, useId } from 'react';
+import { useState, useEffect, useRef, useId, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';
@@ -24,6 +24,7 @@ import type { Variants } from 'framer-motion';
 import type { User } from '@lib/types/user';
 import type { Tweet } from '@lib/types/tweet';
 import type { FilesWithId, ImagesPreview, ImageData } from '@lib/types/file';
+import type { PollData } from './poll-input';
 
 type InputProps = {
   modal?: boolean;
@@ -54,6 +55,10 @@ export function Input({
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [visited, setVisited] = useState(false);
+  const [poll, setPoll] = useState<PollData | null>(null);
+  const [scheduledAt, setScheduledAt] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
+  const [showSchedule, setShowSchedule] = useState(false);
 
   const { user, isAdmin } = useAuth();
   const { name, username, photoURL } = user as User;
@@ -72,13 +77,46 @@ export function Input({
     []
   );
 
+  const handleEmojiInsert = useCallback((emoji: string): void => {
+    const textarea = inputRef.current;
+    if (!textarea) {
+      setInputValue(v => v + emoji);
+      return;
+    }
+    const start = textarea.selectionStart ?? inputValue.length;
+    const end = textarea.selectionEnd ?? inputValue.length;
+    const next = inputValue.slice(0, start) + emoji + inputValue.slice(end);
+    setInputValue(next);
+    // Restore cursor after state update
+    requestAnimationFrame(() => {
+      textarea.selectionStart = start + emoji.length;
+      textarea.selectionEnd = start + emoji.length;
+      textarea.focus();
+    });
+  }, [inputValue]);
+
+  const handleGifSelect = useCallback((url: string, previewUrl: string): void => {
+    const gifFile = { id: url, src: previewUrl, alt: 'GIF', type: 'image/gif' } as ImageData;
+    // Add as a "preview" item — GIF URL will be stored directly
+    setImagesPreview(prev => [...prev, { ...gifFile, src: previewUrl }]);
+    // Store a pseudo-File object so upload handles it
+    fetch(url)
+      .then(r => r.blob())
+      .then(blob => {
+        const file = new File([blob], 'gif.gif', { type: 'image/gif' }) as File & { id: string };
+        file.id = url;
+        setSelectedImages(prev => [...prev, file]);
+      })
+      .catch(() => {
+        toast.error('Could not load GIF');
+      });
+  }, []);
+
   const sendTweet = async (): Promise<void> => {
     inputRef.current?.blur();
-
     setLoading(true);
 
     const isReplying = reply ?? replyModal;
-
     const userId = user?.id as string;
 
     const tweetData: WithFieldValue<Omit<Tweet, 'id'>> = {
@@ -114,7 +152,7 @@ export function Input({
     toast.success(
       () => (
         <span className='flex gap-2'>
-          Your post was sent
+          {scheduledAt ? 'Post scheduled!' : 'Your post was sent'}
           <Link href={`/tweet/${tweetId}`}>
             <a className='custom-underline font-bold'>View</a>
           </Link>
@@ -122,6 +160,12 @@ export function Input({
       ),
       { duration: 6000 }
     );
+
+    // Reset extras
+    setPoll(null);
+    setScheduledAt('');
+    setLocation('');
+    setShowSchedule(false);
   };
 
   const handleImageUpload = (
@@ -158,16 +202,12 @@ export function Input({
     setSelectedImages(selectedImages.filter(({ id }) => id !== targetId));
     setImagesPreview(imagesPreview.filter(({ id }) => id !== targetId));
 
-    const { src } = imagesPreview.find(
-      ({ id }) => id === targetId
-    ) as ImageData;
-
-    URL.revokeObjectURL(src);
+    const found = imagesPreview.find(({ id }) => id === targetId) as ImageData | undefined;
+    if (found) URL.revokeObjectURL(found.src);
   };
 
   const cleanImage = (): void => {
     imagesPreview.forEach(({ src }) => URL.revokeObjectURL(src));
-
     setSelectedImages([]);
     setImagesPreview([]);
   };
@@ -176,7 +216,6 @@ export function Input({
     setInputValue('');
     setVisited(false);
     cleanImage();
-
     inputRef.current?.blur();
   };
 
@@ -194,13 +233,11 @@ export function Input({
   const formId = useId();
 
   const inputLimit = isAdmin ? 560 : 280;
-
   const inputLength = inputValue.length;
   const isValidInput = !!inputValue.trim().length;
   const isCharLimitExceeded = inputLength > inputLimit;
-
   const isValidTweet =
-    !isCharLimitExceeded && (isValidInput || isUploadingImages);
+    !isCharLimitExceeded && (isValidInput || isUploadingImages || !!poll?.options.some(o => o.trim()));
 
   return (
     <form
@@ -277,6 +314,13 @@ export function Input({
                 isValidTweet={isValidTweet}
                 isCharLimitExceeded={isCharLimitExceeded}
                 handleImageUpload={handleImageUpload}
+                onEmojiInsert={handleEmojiInsert}
+                onGifSelect={handleGifSelect}
+                onPollChange={setPoll}
+                onScheduleChange={(v) => { setScheduledAt(v); setShowSchedule(!!v); }}
+                onLocationChange={setLocation}
+                scheduledAt={showSchedule ? scheduledAt : undefined}
+                location={location}
               />
             )}
           </AnimatePresence>
