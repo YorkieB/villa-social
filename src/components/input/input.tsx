@@ -96,9 +96,9 @@ export function Input({
   }, [inputValue]);
 
   const handleGifSelect = useCallback((url: string, previewUrl: string): void => {
-    const gifFile = { id: url, src: previewUrl, alt: 'GIF', type: 'image/gif' } as ImageData;
+    const gifPreviewItem: ImageData & { id: string } = { id: url, src: previewUrl, alt: 'GIF', type: 'image/gif' };
     // Add as a "preview" item — GIF URL will be stored directly
-    setImagesPreview(prev => [...prev, { ...gifFile, src: previewUrl }]);
+    setImagesPreview(prev => [...prev, gifPreviewItem]);
     // Store a pseudo-File object so upload handles it
     fetch(url)
       .then(r => r.blob())
