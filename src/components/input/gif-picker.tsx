@@ -94,6 +94,7 @@ export function GifPicker({ onGifSelect, onClose }: GifPickerProps) {
               gif.media_formats.tinygif.url
             )}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={gif.media_formats.tinygif.url}
               alt={gif.title}

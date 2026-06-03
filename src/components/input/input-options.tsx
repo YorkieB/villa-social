@@ -9,7 +9,6 @@ import { EmojiPicker } from './emoji-picker';
 import { GifPicker } from './gif-picker';
 import { PollInput } from './poll-input';
 import type { ChangeEvent, ClipboardEvent } from 'react';
-import type { IconName } from '@components/ui/hero-icon';
 import type { PollData } from './poll-input';
 
 type InputOptionsProps = {
@@ -67,23 +66,25 @@ export function InputOptions({
 
   const handleLocation = (): void => {
     if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(async (pos) => {
+    navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-        );
-        const data = await res.json() as { address: { city?: string; town?: string; county?: string; country?: string } };
-        const place =
-          data.address.city ||
-          data.address.town ||
-          data.address.county ||
-          data.address.country ||
-          `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
-        onLocationChange?.(place);
-      } catch {
-        onLocationChange?.(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-      }
+      void (async (): Promise<void> => {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await res.json() as { address: { city?: string; town?: string; county?: string; country?: string } };
+          const place =
+            data.address.city ??
+            data.address.town ??
+            data.address.county ??
+            data.address.country ??
+            `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+          onLocationChange?.(place);
+        } catch {
+          onLocationChange?.(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        }
+      })();
     });
   };
 

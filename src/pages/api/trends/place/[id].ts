@@ -12,7 +12,7 @@ const VILLA_TRENDS = [
   { name: '#IndieMusic', query: '%23IndieMusic', tweet_volume: 1421, url: '/trends', promoted_content: null },
   { name: 'Leah Carter', query: 'LeahCarter', tweet_volume: 1203, url: '/trends', promoted_content: null },
   { name: '#NewMusic', query: '%23NewMusic', tweet_volume: 987, url: '/trends', promoted_content: null },
-  { name: '#PenzanceScene', query: '%23PenzanceScene', tweet_volume: 654, url: '/trends', promoted_content: null },
+  { name: '#PenzanceScene', query: '%23PenzanceScene', tweet_volume: 654, url: '/trends', promoted_content: null }
 ];
 
 export default function placeIdEndpoint(
