@@ -25,8 +25,8 @@ import { MainHeader } from '@components/home/main-header';
 import { SEO } from '@components/common/seo';
 import { HeroIcon } from '@components/ui/hero-icon';
 import { UserAvatar } from '@components/user/user-avatar';
-import cn from 'clsx';
 import type { ReactElement, ReactNode, KeyboardEvent } from 'react';
+import cn from 'clsx';
 import type { Timestamp } from 'firebase/firestore';
 import type { Conversation } from '@lib/types/conversation';
 import type { Message } from '@lib/types/message';
@@ -63,7 +63,7 @@ function NewDMModal({
           );
         setResults(all);
       })
-      .catch(() => {});
+      .catch((_err: unknown) => { /* ignore */ });
   }, [search, currentUser.id]);
 
   return (
@@ -161,7 +161,7 @@ function ConvItem({
           </span>
           {conv.lastMessageAt && (
             <span className='flex-shrink-0 text-xs text-secondary'>
-              {formatDate(conv.lastMessageAt as Timestamp, 'tweet')}
+              {formatDate(conv.lastMessageAt, 'tweet')}
             </span>
           )}
         </div>
@@ -211,7 +211,7 @@ function Bubble({ msg, isMine }: BubbleProps): JSX.Element {
           )}
         >
           {msg.sentAt
-            ? formatDate(msg.sentAt as Timestamp, 'message')
+            ? formatDate(msg.sentAt, 'message')
             : '…'}
         </p>
       </div>
@@ -420,31 +420,34 @@ export default function MessagesPage(): JSX.Element {
       where('participants', 'array-contains', currentUser.id),
       orderBy('lastMessageAt', 'desc')
     );
-    const unsub = onSnapshot(q, async (snap) => {
+    const unsub = onSnapshot(q, (snap) => {
       const convs = snap.docs.map((d) => d.data());
       setConversations(convs);
 
-      // Fetch unknown users
-      const unknownUids = new Set<string>();
-      for (const conv of convs) {
-        for (const uid of conv.participants) {
-          if (uid !== currentUser.id && !userCache[uid]) {
-            unknownUids.add(uid);
-          }
-        }
-      }
-      if (unknownUids.size > 0) {
-        const userSnap = await getDocs(
+      // Fetch unknown users (use functional updater to avoid stale closure)
+      setUserCache((prev) => {
+        const unknownUids = new Set<string>();
+        for (const conv of convs)
+          for (const uid of conv.participants)
+            if (uid !== currentUser.id && !prev[uid])
+              unknownUids.add(uid);
+
+        if (unknownUids.size === 0) return prev;
+
+        // Fire-and-forget fetch
+        void getDocs(
           query(usersCollection, where('id', 'in', [...unknownUids].slice(0, 10)))
-        );
-        const newCache: Record<string, User> = {};
-        userSnap.docs.forEach((d) => {
-          newCache[d.data().id] = d.data();
+        ).then((userSnap) => {
+          const fetched: Record<string, User> = {};
+          userSnap.docs.forEach((d) => { fetched[d.data().id] = d.data(); });
+          setUserCache((p) => ({ ...p, ...fetched }));
         });
-        setUserCache((prev) => ({ ...prev, ...newCache }));
-      }
+
+        return prev; // return unchanged for now; will re-render after fetch
+      });
     });
     return unsub;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?.id]);
 
   const getOtherUser = useCallback(
@@ -491,7 +494,7 @@ export default function MessagesPage(): JSX.Element {
         <NewDMModal
           currentUser={currentUser}
           onClose={() => setShowNewDM(false)}
-          onStartConversation={(u) => void startConversation(u)}
+          onStartConversation={(u): void => { void startConversation(u); }}
         />
       )}
 
@@ -527,7 +530,7 @@ export default function MessagesPage(): JSX.Element {
                 otherUser={getOtherUser(conv)}
                 active={conv.id === activeConvId}
                 currentUid={currentUser.id}
-                onClick={() => {
+                onClick={(): void => {
                   setActiveConvId(conv.id);
                   setShowThread(true);
                 }}
