@@ -11,12 +11,10 @@ export function LoginMain(): JSX.Element {
       className='grid min-h-screen lg:grid-cols-[1fr,45vw]'
       style={{ backgroundColor: '#0a0a0e' }}
     >
-      {/* Left panel — dark brand panel */}
+      {/* Left panel — dark brand */}
       <div
         className='relative hidden items-center justify-center lg:flex'
-        style={{
-          background: 'linear-gradient(135deg, #0a0a0a 0%, #111100 100%)'
-        }}
+        style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111100 100%)' }}
       >
         <div className='flex flex-col items-center gap-6 p-12'>
           <VillaLogo size={120} />
@@ -26,16 +24,13 @@ export function LoginMain(): JSX.Element {
           >
             VILLA
           </h1>
-          <p
-            className='text-lg font-medium tracking-wide'
-            style={{ color: '#71767B' }}
-          >
+          <p className='text-lg font-medium tracking-wide' style={{ color: '#71767B' }}>
             KM Music Group
           </p>
         </div>
       </div>
 
-      {/* Right panel — dark, Villa-branded */}
+      {/* Right panel — dark */}
       <div
         className='flex flex-col items-center justify-between gap-6 p-8 lg:items-start lg:justify-center'
         style={{ backgroundColor: '#0e0e14' }}
@@ -67,15 +62,10 @@ export function LoginMain(): JSX.Element {
           <div className='grid gap-3 font-bold'>
             {/* Google sign-in */}
             <Button
-              className='flex justify-center gap-2 border font-bold transition'
-              style={{
-                borderColor: '#3a3a4a',
-                backgroundColor: 'transparent',
-                color: '#E7E9EA'
-              }}
+              className='flex justify-center gap-2 border font-bold transition-colors
+                         hover:bg-white/5 active:bg-white/10'
+              style={{ borderColor: '#3a3a4a', backgroundColor: 'transparent', color: '#E7E9EA' }}
               onClick={signInWithGoogle}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1a1a24')}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
               <CustomIcon iconName='GoogleIcon' /> Sign up with Google
             </Button>
@@ -87,18 +77,17 @@ export function LoginMain(): JSX.Element {
               <i className='border-b' style={{ borderColor: '#2F3336' }} />
             </div>
 
-            {/* Email sign-up placeholder */}
+            {/* Email placeholder */}
             <Button
               className='cursor-not-allowed font-bold text-white transition hover:brightness-90
-                         focus-visible:brightness-90 active:brightness-75'
+                         active:brightness-75'
               style={{ backgroundColor: '#f59e0b' }}
             >
               Sign up with phone or email
             </Button>
 
             <p className='text-center text-xs' style={{ color: '#71767B' }}>
-              By signing up, you agree to Villa&apos;s Terms of Service and
-              Privacy Policy.
+              By signing up, you agree to Villa&apos;s Terms of Service and Privacy Policy.
             </p>
           </div>
 
@@ -107,12 +96,8 @@ export function LoginMain(): JSX.Element {
               Already have an account?
             </p>
             <Button
-              className='border font-bold transition hover:brightness-110 active:brightness-90'
-              style={{
-                borderColor: '#f59e0b',
-                color: '#f59e0b',
-                backgroundColor: 'transparent'
-              }}
+              className='border font-bold transition hover:bg-amber-500/10 active:bg-amber-500/20'
+              style={{ borderColor: '#f59e0b', color: '#f59e0b', backgroundColor: 'transparent' }}
               onClick={signInWithGoogle}
             >
               Sign in
