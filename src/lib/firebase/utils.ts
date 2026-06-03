@@ -281,3 +281,11 @@ export async function clearAllBookmarks(userId: string): Promise<void> {
 
   await batch.commit();
 }
+
+export async function updateUserPrivacy(
+  userId: string,
+  isPrivate: boolean
+): Promise<void> {
+  const userRef = doc(usersCollection, userId);
+  await updateDoc(userRef, { isPrivate, updatedAt: serverTimestamp() });
+}

@@ -20,6 +20,7 @@ export type User = {
   totalPhotos: number;
   pinnedTweet: string | null;
   coverPhotoURL: string | null;
+  isPrivate: boolean;
 };
 
 export type EditableData = Extract<
