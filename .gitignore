@@ -38,3 +38,7 @@ next-env.d.ts
 # python
 /.mypy_cache
 *.py
+
+# Villa Social — env files contain Firebase credentials, managed on server
+.env.development
+.env.production
