@@ -436,7 +436,7 @@ export default function MessagesPage(): JSX.Element {
 
         // Fire-and-forget fetch
         void getDocs(
-          query(usersCollection, where('id', 'in', [...unknownUids].slice(0, 10)))
+          query(usersCollection, where('id', 'in', Array.from(unknownUids).slice(0, 10)))
         ).then((userSnap) => {
           const fetched: Record<string, User> = {};
           userSnap.docs.forEach((d) => { fetched[d.data().id] = d.data(); });
