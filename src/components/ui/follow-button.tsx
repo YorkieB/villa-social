@@ -58,10 +58,9 @@ export function FollowButton({
         </Button>
       ) : (
         <Button
-          className='self-start border bg-light-primary px-4 py-1.5 font-bold text-white hover:bg-light-primary/90 
-                     focus-visible:bg-light-primary/90 active:bg-light-border/75 dark:bg-light-border 
-                     dark:text-light-primary dark:hover:bg-light-border/90 dark:focus-visible:bg-light-border/90 
-                     dark:active:bg-light-border/75'
+          className='self-start border border-main-accent bg-main-accent px-4 py-1.5 font-bold 
+                     text-white hover:bg-main-accent/90 focus-visible:bg-main-accent/90 
+                     active:bg-main-accent/75'
           onClick={preventBubbling(handleFollow)}
         >
           Follow

@@ -20,8 +20,9 @@ import { variants } from './aside-trends';
 export function Suggestions(): JSX.Element {
   const { randomSeed } = useAuth();
 
+  // Kayleigh Merez — KM Music Group admin account
   const { data: adminData, loading: adminLoading } = useDocument(
-    doc(usersCollection, 'Twt0A27bx9YcG4vu3RTsR7ifJzf2'),
+    doc(usersCollection, 'hxqrHizX9LcfMq7kqEKrTuSxZrl1'),
     { allowNull: true }
   );
 

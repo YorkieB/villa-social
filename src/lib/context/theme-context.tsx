@@ -21,19 +21,16 @@ type ThemeContextProviderProps = {
 
 function setInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'dark';
-
   const savedTheme = localStorage.getItem('theme') as Theme | null;
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  return savedTheme ?? (prefersDark ? 'dark' : 'light');
+  // Villa defaults to dark — only override if user explicitly saved a preference
+  return savedTheme ?? 'dark';
 }
 
 function setInitialAccent(): Accent {
-  if (typeof window === 'undefined') return 'blue';
-
+  if (typeof window === 'undefined') return 'yellow';
   const savedAccent = localStorage.getItem('accent') as Accent | null;
-
-  return savedAccent ?? 'blue';
+  // Villa defaults to amber/yellow
+  return savedAccent ?? 'yellow';
 }
 
 export function ThemeContextProvider({
@@ -62,16 +59,8 @@ export function ThemeContextProvider({
       else root.classList.remove('dark');
 
       root.style.setProperty('--main-background', `var(--${theme}-background)`);
-
-      root.style.setProperty(
-        '--main-search-background',
-        `var(--${theme}-search-background)`
-      );
-
-      root.style.setProperty(
-        '--main-sidebar-background',
-        `var(--${theme}-sidebar-background)`
-      );
+      root.style.setProperty('--main-search-background', `var(--${theme}-search-background)`);
+      root.style.setProperty('--main-sidebar-background', `var(--${theme}-sidebar-background)`);
 
       if (user) {
         localStorage.setItem('theme', theme);
@@ -88,7 +77,6 @@ export function ThemeContextProvider({
   useEffect(() => {
     const flipAccent = (accent: Accent): NodeJS.Timeout | undefined => {
       const root = document.documentElement;
-
       root.style.setProperty('--main-accent', `var(--accent-${accent})`);
 
       if (user) {
@@ -103,20 +91,13 @@ export function ThemeContextProvider({
     return () => clearTimeout(timeoutId);
   }, [userId, accent]);
 
-  const changeTheme = ({
-    target: { value }
-  }: ChangeEvent<HTMLInputElement>): void => setTheme(value as Theme);
+  const changeTheme = ({ target: { value } }: ChangeEvent<HTMLInputElement>): void =>
+    setTheme(value as Theme);
 
-  const changeAccent = ({
-    target: { value }
-  }: ChangeEvent<HTMLInputElement>): void => setAccent(value as Accent);
+  const changeAccent = ({ target: { value } }: ChangeEvent<HTMLInputElement>): void =>
+    setAccent(value as Accent);
 
-  const value: ThemeContext = {
-    theme,
-    accent,
-    changeTheme,
-    changeAccent
-  };
+  const value: ThemeContext = { theme, accent, changeTheme, changeAccent };
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
@@ -125,9 +106,6 @@ export function ThemeContextProvider({
 
 export function useTheme(): ThemeContext {
   const context = useContext(ThemeContext);
-
-  if (!context)
-    throw new Error('useTheme must be used within an ThemeContextProvider');
-
+  if (!context) throw new Error('useTheme must be used within an ThemeContextProvider');
   return context;
 }

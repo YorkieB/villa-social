@@ -6,23 +6,26 @@
 
 @layer base {
   :root {
+    /* Villa defaults to dark mode with amber accent */
     --main-background: var(--dark-background);
     --main-search-background: var(--dark-search-background);
     --main-sidebar-background: var(--dark-sidebar-background);
     --main-accent: var(--accent-yellow);
 
-    --dark-background: 0 0 0;
-    --dim-background: 22 33 44;
+    /* Villa dark palette — deeper than Twitter's defaults */
+    --dark-background: 10 10 14;
+    --dim-background: 18 26 36;
     --light-background: 255 255 255;
 
-    --dark-search-background: 32 35 39;
-    --dim-search-background: 39 51 64;
+    --dark-search-background: 28 28 36;
+    --dim-search-background: 32 44 56;
     --light-search-background: 239 243 244;
 
-    --dark-sidebar-background: 22 24 28;
-    --dim-sidebar-background: 30 39 50;
+    --dark-sidebar-background: 14 14 20;
+    --dim-sidebar-background: 22 30 42;
     --light-sidebar-background: 247 249 249;
 
+    /* Accent palette — amber is Villa's primary */
     --accent-yellow: 245 158 11;
     --accent-blue: 29 155 240;
     --accent-pink: 249 26 130;
@@ -88,8 +91,8 @@
   }
 
   .menu-container {
-    @apply z-10 rounded-md bg-main-background outline-none 
-           [box-shadow:#65778633_0px_0px_15px,_#65778626_0px_0px_3px_1px] 
-           dark:[box-shadow:#ffffff33_0px_0px_15px,_#ffffff26_0px_0px_3px_1px];
+    @apply z-10 rounded-2xl bg-main-background outline-none 
+           [box-shadow:#f59e0b22_0px_0px_20px,_#f59e0b11_0px_0px_4px_1px] 
+           dark:[box-shadow:#f59e0b22_0px_0px_20px,_#f59e0b11_0px_0px_4px_1px];
   }
 }
