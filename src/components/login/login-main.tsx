@@ -7,7 +7,11 @@ export function LoginMain(): JSX.Element {
   const { signInWithGoogle } = useAuth();
 
   return (
-    <main className='grid lg:grid-cols-[1fr,45vw]'>
+    <main
+      className='grid min-h-screen lg:grid-cols-[1fr,45vw]'
+      style={{ backgroundColor: '#0a0a0e' }}
+    >
+      {/* Left panel — dark brand panel */}
       <div
         className='relative hidden items-center justify-center lg:flex'
         style={{
@@ -30,58 +34,85 @@ export function LoginMain(): JSX.Element {
           </p>
         </div>
       </div>
-      <div className='flex flex-col items-center justify-between gap-6 p-8 lg:items-start lg:justify-center'>
+
+      {/* Right panel — dark, Villa-branded */}
+      <div
+        className='flex flex-col items-center justify-between gap-6 p-8 lg:items-start lg:justify-center'
+        style={{ backgroundColor: '#0e0e14' }}
+      >
+        {/* Mobile logo */}
         <i className='mb-0 self-center lg:mb-10 lg:self-auto'>
           <CustomIcon
-            className='-mt-4 h-6 w-6 lg:h-12 lg:w-12'
+            className='-mt-4 h-6 w-6 text-amber-500 lg:h-12 lg:w-12'
             iconName='TwitterIcon'
           />
         </i>
+
         <div className='flex max-w-xs flex-col gap-4 font-inter lg:max-w-none lg:gap-16'>
           <h1
             className='text-3xl font-black lg:text-6xl'
-            style={{ lineHeight: 1.1 }}
+            style={{ lineHeight: 1.1, color: '#E7E9EA' }}
           >
             Your place in the music.
           </h1>
-          <h2 className='hidden text-xl font-bold lg:block lg:text-3xl'>
+          <h2
+            className='hidden text-xl font-bold lg:block lg:text-3xl'
+            style={{ color: '#E7E9EA' }}
+          >
             Join Villa today.
           </h2>
         </div>
+
         <div className='flex max-w-xs flex-col gap-6 [&_button]:py-2'>
           <div className='grid gap-3 font-bold'>
+            {/* Google sign-in */}
             <Button
-              className='flex justify-center gap-2 border border-light-line-reply font-bold text-light-primary transition
-                         hover:bg-[#e6e6e6] focus-visible:bg-[#e6e6e6] active:bg-[#cccccc] dark:border-0 dark:bg-white
-                         dark:hover:brightness-90 dark:focus-visible:brightness-90 dark:active:brightness-75'
+              className='flex justify-center gap-2 border font-bold transition'
+              style={{
+                borderColor: '#3a3a4a',
+                backgroundColor: 'transparent',
+                color: '#E7E9EA'
+              }}
               onClick={signInWithGoogle}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#1a1a24')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
               <CustomIcon iconName='GoogleIcon' /> Sign up with Google
             </Button>
+
+            {/* Divider */}
             <div className='grid w-full grid-cols-[1fr,auto,1fr] items-center gap-2'>
-              <i className='border-b border-light-border dark:border-dark-border' />
-              <p>or</p>
-              <i className='border-b border-light-border dark:border-dark-border' />
+              <i className='border-b' style={{ borderColor: '#2F3336' }} />
+              <p style={{ color: '#71767B' }}>or</p>
+              <i className='border-b' style={{ borderColor: '#2F3336' }} />
             </div>
+
+            {/* Email sign-up placeholder */}
             <Button
-              className='cursor-not-allowed bg-main-accent text-white transition hover:brightness-90
-                         focus-visible:!ring-main-accent/80 focus-visible:brightness-90 active:brightness-75'
+              className='cursor-not-allowed font-bold text-white transition hover:brightness-90
+                         focus-visible:brightness-90 active:brightness-75'
+              style={{ backgroundColor: '#f59e0b' }}
             >
               Sign up with phone or email
             </Button>
-            <p
-              className='text-center text-xs text-light-secondary dark:text-dark-secondary'
-            >
+
+            <p className='text-center text-xs' style={{ color: '#71767B' }}>
               By signing up, you agree to Villa&apos;s Terms of Service and
               Privacy Policy.
             </p>
           </div>
+
           <div className='flex flex-col gap-3'>
-            <p className='font-bold'>Already have an account? </p>
+            <p className='font-bold' style={{ color: '#E7E9EA' }}>
+              Already have an account?
+            </p>
             <Button
-              className='border border-light-line-reply font-bold text-main-accent hover:bg-main-accent/10
-                         focus-visible:bg-main-accent/10 focus-visible:!ring-main-accent/80 active:bg-main-accent/20
-                         dark:border-light-secondary'
+              className='border font-bold transition hover:brightness-110 active:brightness-90'
+              style={{
+                borderColor: '#f59e0b',
+                color: '#f59e0b',
+                backgroundColor: 'transparent'
+              }}
               onClick={signInWithGoogle}
             >
               Sign in
