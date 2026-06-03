@@ -1,57 +1,31 @@
-import { AUTH } from '@lib/api/auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type {
-  TrendsData,
-  ErrorResponse,
-  TrendsResponse,
-  FilteredTrends
-} from '@lib/types/place';
+import type { TrendsResponse, ErrorResponse } from '@lib/types/place';
 
-type PlaceIdEndpointQuery = {
-  id: string;
-  limit?: string;
-};
+// Static Villa trending topics — replaces Twitter API
+const VILLA_TRENDS = [
+  { name: '#KMRecords', query: '%23KMRecords', tweet_volume: 4821, url: '/trends' },
+  { name: '#TonightSingle', query: '%23TonightSingle', tweet_volume: 3204, url: '/trends' },
+  { name: 'Kayleigh Merez', query: 'KayleighMerez', tweet_volume: 2918, url: '/trends' },
+  { name: '#VillaRadio', query: '%23VillaRadio', tweet_volume: 2540, url: '/trends' },
+  { name: '#BackInMyOwnName', query: '%23BackInMyOwnName', tweet_volume: 1876, url: '/trends' },
+  { name: 'The Crash', query: 'TheCrash', tweet_volume: 1654, url: '/trends' },
+  { name: '#IndieMusic', query: '%23IndieMusic', tweet_volume: 1421, url: '/trends' },
+  { name: 'Leah Carter', query: 'LeahCarter', tweet_volume: 1203, url: '/trends' },
+  { name: '#NewMusic', query: '%23NewMusic', tweet_volume: 987, url: '/trends' },
+  { name: '#PenzanceScene', query: '%23PenzanceScene', tweet_volume: 654, url: '/trends' },
+];
 
-export default async function placeIdEndpoint(
+export default function placeIdEndpoint(
   req: NextApiRequest,
   res: NextApiResponse<TrendsResponse | ErrorResponse>
-): Promise<void> {
-  const { id, limit } = req.query as PlaceIdEndpointQuery;
+): void {
+  const { limit } = req.query as { id: string; limit?: string };
 
-  const response = await fetch(
-    `https://api.twitter.com/1.1/trends/place.json?id=${id}`,
-    AUTH
-  );
+  const limitNum = limit ? parseInt(limit, 10) : null;
+  const trends = limitNum ? VILLA_TRENDS.slice(0, limitNum) : VILLA_TRENDS;
 
-  const rawData = (await response.json()) as TrendsData | ErrorResponse;
-
-  const data =
-    'errors' in rawData
-      ? rawData
-      : { trends: rawData[0].trends, location: rawData[0].locations[0].name };
-
-  const limitParam = limit ? parseInt(limit, 10) : null;
-
-  let formattedTrends = limitParam && !('errors' in data) ? data.trends : null;
-
-  if (formattedTrends) {
-    const filteredTrends = formattedTrends.filter(
-      ({ tweet_volume }) => tweet_volume
-    ) as FilteredTrends;
-
-    formattedTrends = filteredTrends
-      .map(({ url, ...rest }) => ({
-        ...rest,
-        url: url.replace(/http.*.com/, '')
-      }))
-      .sort((a, b) => b.tweet_volume - a.tweet_volume);
-
-    if (limitParam) formattedTrends = formattedTrends.slice(0, limitParam);
-  }
-
-  const formattedData = formattedTrends
-    ? { ...data, trends: formattedTrends }
-    : null;
-
-  res.status(response.status).json(formattedData ?? data);
+  res.status(200).json({
+    trends,
+    location: 'Villa'
+  });
 }

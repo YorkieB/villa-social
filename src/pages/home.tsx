@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import { where, orderBy } from 'firebase/firestore';
+import { orderBy } from 'firebase/firestore';
 import { useWindow } from '@lib/context/window-context';
 import { useInfiniteScroll } from '@lib/hooks/useInfiniteScroll';
 import { tweetsCollection } from '@lib/firebase/collections';
@@ -20,7 +20,7 @@ export default function Home(): JSX.Element {
 
   const { data, loading, LoadMore } = useInfiniteScroll(
     tweetsCollection,
-    [where('parent', '==', null), orderBy('createdAt', 'desc')],
+    [orderBy('createdAt', 'desc')],
     { includeUser: true, allowNull: true, preserve: true }
   );
 

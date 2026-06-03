@@ -1,17 +1,8 @@
-import { AUTH } from '@lib/api/auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { AvailablePlaces } from '@lib/types/available';
 
-export default async function availableEndpoint(
+export default function availableEndpoint(
   _req: NextApiRequest,
-  res: NextApiResponse<AvailablePlaces>
-): Promise<void> {
-  const response = await fetch(
-    'https://api.twitter.com/1.1/trends/available.json',
-    AUTH
-  );
-
-  const data = (await response.json()) as AvailablePlaces;
-
-  res.status(response.status).json(data);
+  res: NextApiResponse
+): void {
+  res.status(200).json([{ name: 'Villa', placeType: { name: 'Supername' }, woeid: 1 }]);
 }
