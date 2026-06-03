@@ -8,8 +8,8 @@ export default function Login(): JSX.Element {
   return (
     <div className='grid min-h-screen grid-rows-[1fr,auto]'>
       <SEO
-        title='Twitter - It’s what’s happening'
-        description='From breaking news and entertainment to sports and politics, get the full story with all the live commentary.'
+        title='Villa — Your place in the music'
+        description='Join Villa by KM Music Group. Your place in the music.'
       />
       <LoginMain />
       <LoginFooter />

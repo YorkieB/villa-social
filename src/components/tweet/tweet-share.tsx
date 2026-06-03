@@ -37,13 +37,13 @@ export function TweetShare({
         type === 'bookmark'
           ? (): JSX.Element => (
               <span className='flex gap-2'>
-                Tweet added to your Bookmarks
+                Post added to your Bookmarks
                 <Link href='/bookmarks'>
                   <a className='custom-underline font-bold'>View</a>
                 </Link>
               </span>
             )
-          : 'Tweet removed from your bookmarks'
+          : 'Post removed from your bookmarks'
       );
     };
 
@@ -62,14 +62,14 @@ export function TweetShare({
           <Popover.Button
             className={cn(
               `group relative flex items-center gap-1 p-0 outline-none 
-               transition-none hover:text-accent-blue focus-visible:text-accent-blue`,
-              open && 'text-accent-blue inner:bg-accent-blue/10'
+               transition-none hover:text-main-accent focus-visible:text-main-accent`,
+              open && 'text-main-accent inner:bg-main-accent/10'
             )}
           >
             <i
-              className='relative rounded-full p-2 not-italic duration-200 group-hover:bg-accent-blue/10 
-                         group-focus-visible:bg-accent-blue/10 group-focus-visible:ring-2 
-                         group-focus-visible:ring-accent-blue/80 group-active:bg-accent-blue/20'
+              className='relative rounded-full p-2 not-italic duration-200 group-hover:bg-main-accent/10 
+                         group-focus-visible:bg-main-accent/10 group-focus-visible:ring-2 
+                         group-focus-visible:ring-main-accent/80 group-active:bg-main-accent/20'
             >
               <HeroIcon
                 className={viewTweet ? 'h-6 w-6' : 'h-5 w-5'}
@@ -92,7 +92,7 @@ export function TweetShare({
                   onClick={preventBubbling(handleCopy(close))}
                 >
                   <HeroIcon iconName='LinkIcon' />
-                  Copy link to Tweet
+                  Copy link to post
                 </Popover.Button>
                 {!tweetIsBookmarked ? (
                   <Popover.Button
@@ -114,7 +114,7 @@ export function TweetShare({
                     )}
                   >
                     <HeroIcon iconName='BookmarkSlashIcon' />
-                    Remove Tweet from Bookmarks
+                    Remove post from Bookmarks
                   </Popover.Button>
                 )}
               </Popover.Panel>

@@ -9,7 +9,7 @@
     --main-background: var(--dark-background);
     --main-search-background: var(--dark-search-background);
     --main-sidebar-background: var(--dark-sidebar-background);
-    --main-accent: var(--accent-blue);
+    --main-accent: var(--accent-yellow);
 
     --dark-background: 0 0 0;
     --dim-background: 22 33 44;
@@ -23,7 +23,7 @@
     --dim-sidebar-background: 30 39 50;
     --light-sidebar-background: 247 249 249;
 
-    --accent-yellow: 255 213 0;
+    --accent-yellow: 245 158 11;
     --accent-blue: 29 155 240;
     --accent-pink: 249 26 130;
     --accent-purple: 120 87 255;
@@ -39,7 +39,7 @@
   }
 
   body {
-    @apply hover-animation bg-main-background font-twitter-chirp text-light-primary dark:text-dark-primary;
+    @apply hover-animation bg-main-background font-inter text-light-primary dark:text-dark-primary;
   }
 }
 
