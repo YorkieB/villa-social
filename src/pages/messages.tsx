@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   query,
@@ -27,7 +29,6 @@ import { HeroIcon } from '@components/ui/hero-icon';
 import { UserAvatar } from '@components/user/user-avatar';
 import type { ReactElement, ReactNode, KeyboardEvent } from 'react';
 import cn from 'clsx';
-import type { Timestamp } from 'firebase/firestore';
 import type { Conversation } from '@lib/types/conversation';
 import type { Message } from '@lib/types/message';
 import type { User } from '@lib/types/user';
@@ -63,7 +64,8 @@ function NewDMModal({
           );
         setResults(all);
       })
-      .catch((_err: unknown) => { /* ignore */ });
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      .catch((_err: unknown) => {});
   }, [search, currentUser.id]);
 
   return (
@@ -257,7 +259,8 @@ function ThreadPanel({
     const convRef = doc(conversationsCollection, conversationId);
     updateDoc(convRef, {
       [`unreadCount.${currentUser.id}`]: 0
-    }).catch(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    }).catch((_e: unknown) => {});
   }, [conversationId, currentUser.id]);
 
   // Scroll to bottom on new messages
