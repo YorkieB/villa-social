@@ -13,24 +13,29 @@ jobs:
 
       - name: Deploy to droplet
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         with:
           host: 161.35.35.41
           username: root
           key: ${{ secrets.DROPLET_SSH_KEY }}
+          envs: GH_PAT
           script: |
             set -e
             cd /opt/villa-social
 
-            echo "=== Fixing remote URL ==="
-            git remote set-url origin git@github.com:YorkieB/villa-social.git
-
-            echo "=== Trusting GitHub host key ==="
-            mkdir -p ~/.ssh
-            ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
-            chmod 600 ~/.ssh/known_hosts
+            echo "=== Fixing remote to use token auth ==="
+            if [ -n "$GH_PAT" ]; then
+              git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/YorkieB/villa-social.git"
+            else
+              # Fallback: try SSH if a deploy key exists
+              git remote set-url origin git@github.com:YorkieB/villa-social.git
+              mkdir -p ~/.ssh
+              ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+            fi
 
             echo "=== Pulling latest code ==="
-            GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no' git pull origin main
+            git pull origin main
 
             echo "=== Installing deps ==="
             npm install --legacy-peer-deps
