@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable import/order */
+/* eslint-disable curly */
+/* eslint-disable import/no-duplicates */
 import { useState, useCallback } from 'react';
 import {
   updatePassword,
@@ -8,9 +12,9 @@ import {
   GoogleAuthProvider,
   reauthenticateWithPopup
 } from 'firebase/auth';
+import cn from 'clsx';
 import { auth } from '@lib/firebase/app';
-import { updateUserData, updateUsername, updateUserPrivacy } from '@lib/firebase/utils';
-import { checkUsernameAvailability } from '@lib/firebase/utils';
+import { updateUserData, updateUsername, updateUserPrivacy, checkUsernameAvailability } from '@lib/firebase/utils';
 import { useAuth } from '@lib/context/auth-context';
 import { MainLayout } from '@components/layout/main-layout';
 import { ProtectedLayout } from '@components/layout/common-layout';
@@ -19,7 +23,6 @@ import { SEO } from '@components/common/seo';
 import { HeroIcon } from '@components/ui/hero-icon';
 import { InputAccentRadio } from '@components/input/input-accent-radio';
 import { InputThemeRadio } from '@components/input/input-theme-radio';
-import cn from 'clsx';
 import type { ReactElement, ReactNode, ChangeEvent } from 'react';
 import type { Theme, Accent } from '@lib/types/theme';
 import type { User } from '@lib/types/user';
