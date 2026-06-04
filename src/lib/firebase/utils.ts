@@ -136,7 +136,10 @@ export async function uploadImages(
 
       const storageRef = ref(storage, `images/${userId}/${id}`);
 
-      await uploadBytesResumable(storageRef, file);
+      await new Promise<void>((resolve, reject) => {
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on('state_changed', null, reject, resolve);
+      });
 
       const src = await getDownloadURL(storageRef);
 

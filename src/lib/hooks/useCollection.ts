@@ -76,7 +76,14 @@ export function useCollection<T>(
       );
 
       if (allowNull && !data.length) {
-        setData(null);
+        // Only wipe data to null for non-user queries.
+        // For includeUser queries (e.g. the home timeline), set an empty array
+        // so the timeline doesn't flash a blank/error state between snapshots.
+        if (includeUser) {
+          setData([]);
+        } else {
+          setData(null);
+        }
         setLoading(false);
         return;
       }
