@@ -93,7 +93,8 @@ export function AuthContextProvider({
           totalTweets: 0,
           totalPhotos: 0,
           pinnedTweet: null,
-          coverPhotoURL: null
+          coverPhotoURL: null,
+          isPrivate: false
         };
 
         const userStatsData: WithFieldValue<Stats> = {
