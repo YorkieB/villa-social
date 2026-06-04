@@ -1,4 +1,10 @@
-export function VillaLogo({ className = '', size = 36 }: { className?: string; size?: number }) {
+export function VillaLogo({
+  className = '',
+  size = 36
+}: {
+  className?: string;
+  size?: number;
+}) {
   return (
     <svg
       width={size}
@@ -11,45 +17,45 @@ export function VillaLogo({ className = '', size = 36 }: { className?: string; s
       {/* Outer signal arc left */}
       <path
         d='M4 18 C4 10, 10 4, 18 4'
-        stroke='#f59e0b'
+        stroke='currentColor'
         strokeWidth='2.5'
         strokeLinecap='round'
-        opacity='0.4'
+        opacity='0.35'
       />
       {/* Outer signal arc right */}
       <path
         d='M32 18 C32 10, 26 4, 18 4'
-        stroke='#f59e0b'
+        stroke='currentColor'
         strokeWidth='2.5'
         strokeLinecap='round'
-        opacity='0.4'
+        opacity='0.35'
       />
       {/* Mid signal arc left */}
       <path
         d='M8 20 C8 13, 12.5 8.5, 18 8'
-        stroke='#f59e0b'
+        stroke='currentColor'
         strokeWidth='2.5'
         strokeLinecap='round'
-        opacity='0.65'
+        opacity='0.6'
       />
       {/* Mid signal arc right */}
       <path
         d='M28 20 C28 13, 23.5 8.5, 18 8'
-        stroke='#f59e0b'
+        stroke='currentColor'
         strokeWidth='2.5'
         strokeLinecap='round'
-        opacity='0.65'
+        opacity='0.6'
       />
       {/* V shape */}
       <path
         d='M10 12 L18 28 L26 12'
-        stroke='#f59e0b'
+        stroke='currentColor'
         strokeWidth='3'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       {/* Centre dot */}
-      <circle cx='18' cy='28' r='1.5' fill='#f59e0b' />
+      <circle cx='18' cy='28' r='1.5' fill='currentColor' />
     </svg>
   );
 }

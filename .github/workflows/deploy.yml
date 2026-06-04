@@ -24,6 +24,9 @@ jobs:
             echo "=== Pulling latest code ==="
             git pull origin main
 
+            echo "=== Installing deps ==="
+            npm install --legacy-peer-deps
+
             echo "=== Building ==="
             NODE_ENV=production npx next build
 

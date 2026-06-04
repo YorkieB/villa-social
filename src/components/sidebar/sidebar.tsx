@@ -123,14 +123,15 @@ export function Sidebar(): JSX.Element {
 
           {/* ── Post CTA ── */}
           <Button
-            className='btn-primary mt-3 w-full text-center outline-none
-                       xs:mt-2 xs:p-3 xl:mt-4
-                       absolute right-4 bottom-20 w-auto xs:static xs:w-auto xl:w-full'
+            className='accent-tab mt-3 flex items-center justify-center gap-2 rounded-xl
+                       bg-main-accent px-4 py-3 font-semibold text-white outline-none
+                       transition-all duration-150 hover:brightness-110 active:scale-[0.97]
+                       xs:mt-2 xl:mt-4 xl:w-full'
             onClick={openModal}
           >
-            {/* Icon-only on small sidebar */}
-            <span className='block xl:hidden text-lg'>+</span>
-            <span className='hidden xl:block font-semibold'>Post</span>
+            {/* Icon-only on narrow sidebar, full label on xl */}
+            <span className='text-xl xl:hidden'>+</span>
+            <span className='hidden xl:block'>Post</span>
           </Button>
         </section>
 
