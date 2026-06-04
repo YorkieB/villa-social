@@ -21,6 +21,9 @@ jobs:
             set -e
             cd /opt/villa-social
 
+            echo "=== Fixing remote URL ==="
+            git remote set-url origin https://github.com/YorkieB/villa-social.git
+
             echo "=== Pulling latest code ==="
             git pull origin main
 
