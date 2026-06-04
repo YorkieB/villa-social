@@ -6,32 +6,72 @@
 
 @layer base {
   :root {
-    /* Villa defaults to dark mode with amber accent */
+    /* ── Villa Design System v2 ────────────────────────────────
+       Primary accent: Teal (#01696F → rgb 1 105 111)
+       Dark-first: warm near-black surfaces, no pure whites
+       Font: Satoshi (Fontshare CDN)
+    ────────────────────────────────────────────────────────── */
+
+    /* Default theme tokens (dark) */
     --main-background: var(--dark-background);
     --main-search-background: var(--dark-search-background);
     --main-sidebar-background: var(--dark-sidebar-background);
-    --main-accent: var(--accent-yellow);
+    --main-accent: var(--accent-teal);
+    --main-primary: var(--dark-primary);
+    --main-secondary: var(--dark-secondary-text);
+    --main-border: var(--dark-border-color);
 
-    /* Villa dark palette — deeper than Twitter's defaults */
-    --dark-background: 10 10 14;
-    --dim-background: 18 26 36;
-    --light-background: 255 255 255;
+    /* ── Dark palette (warm near-black) ── */
+    --dark-background: 23 22 20;          /* #171614 */
+    --dim-background: 28 27 25;           /* #1C1B19 */
+    --light-background: 247 246 242;      /* #F7F6F2 warm white */
 
-    --dark-search-background: 28 28 36;
-    --dim-search-background: 32 44 56;
-    --light-search-background: 239 243 244;
+    --dark-search-background: 32 31 29;   /* #201F1D */
+    --dim-search-background: 38 37 35;    /* #262523 */
+    --light-search-background: 239 238 235;
 
-    --dark-sidebar-background: 14 14 20;
-    --dim-sidebar-background: 22 30 42;
-    --light-sidebar-background: 247 249 249;
+    --dark-sidebar-background: 20 19 17;  /* #141311 */
+    --dim-sidebar-background: 25 24 22;   /* #191816 */
+    --light-sidebar-background: 251 250 248;
 
-    /* Accent palette — amber is Villa's primary */
-    --accent-yellow: 245 158 11;
+    /* ── Text ── */
+    --dark-primary: 205 204 202;          /* #CDCCCA */
+    --dark-secondary-text: 121 120 118;   /* #797876 */
+    --light-primary: 40 37 29;            /* #28251D */
+    --light-secondary-text: 100 96 88;    /* #646058 */
+
+    /* ── Borders ── */
+    --dark-border-color: 57 56 54;        /* #393836 */
+    --light-border-color: 212 209 202;    /* #D4D1CA */
+
+    /* ── Reply thread line ── */
+    --dark-line-reply: 57 56 54;
+    --light-line-reply: 212 209 202;
+
+    /* ── Accent palette ── */
+    --accent-teal: 1 105 111;             /* #01696F — Villa primary */
+    --accent-teal-hover: 12 78 84;        /* #0C4E54 */
+    --accent-yellow: 217 132 8;           /* amber — legacy, kept for theme switcher */
     --accent-blue: 29 155 240;
     --accent-pink: 249 26 130;
     --accent-purple: 120 87 255;
     --accent-orange: 255 122 0;
     --accent-green: 0 184 122;
+
+    /* ── Semantic ── */
+    --color-error: 161 44 123;            /* #A12C7B */
+    --color-success: 67 122 34;           /* #437A22 */
+    --color-warning: 150 66 25;           /* #964219 */
+  }
+
+  /* Light theme overrides */
+  html:not(.dark) {
+    --main-background: var(--light-background);
+    --main-search-background: var(--light-search-background);
+    --main-sidebar-background: var(--light-sidebar-background);
+    --main-primary: var(--light-primary);
+    --main-secondary: var(--light-secondary-text);
+    --main-border: var(--light-border-color);
   }
 
   a,
@@ -42,31 +82,50 @@
   }
 
   body {
-    @apply hover-animation bg-main-background font-inter text-light-primary dark:text-dark-primary;
+    @apply hover-animation bg-main-background font-satoshi text-light-primary dark:text-dark-primary;
+    font-size: 16px;
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+  }
+
+  /* Smooth scrollbar in dark mode */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-dark-border;
   }
 }
 
 @layer components {
+  /* ── Motion ── */
   .hover-animation {
     @apply transition-colors duration-200;
   }
 
+  /* ── Base button shape ── */
   .custom-button {
-    @apply hover-animation rounded-full p-3 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply hover-animation rounded-xl p-3 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  /* ── Underline links ── */
   .custom-underline {
-    @apply hover-animation underline decoration-transparent outline-none transition [text-decoration-thickness:1px] 
-           hover:decoration-inherit focus-visible:decoration-inherit;
+    @apply hover-animation underline decoration-transparent outline-none transition
+           [text-decoration-thickness:1px] hover:decoration-inherit focus-visible:decoration-inherit;
   }
 
+  /* ── Focus rings ── */
   .main-tab {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-[#878a8c] focus-visible:transition-shadow 
-           focus-visible:duration-200 dark:focus-visible:ring-white;
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-[#878a8c]/60
+           focus-visible:transition-shadow focus-visible:duration-200
+           dark:focus-visible:ring-white/30;
   }
 
   .accent-tab {
-    @apply main-tab #{'focus-visible:!ring-main-accent/80'};
+    @apply main-tab #{'focus-visible:!ring-main-accent/40'};
   }
 
   .accent-bg-tab {
@@ -77,22 +136,69 @@
     @apply focus-visible:bg-light-primary/10 dark:focus-visible:bg-dark-primary/10;
   }
 
+  /* ── Avatar hover ── */
   .blur-picture {
-    @apply hover-animation accent-tab rounded-full transition hover:brightness-75 active:brightness-100;
+    @apply hover-animation accent-tab rounded-lg transition hover:brightness-80 active:brightness-100;
   }
 
+  /* ── Text truncation ── */
   .trim-alt {
-    @apply overflow-hidden text-ellipsis break-all [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical];
+    @apply overflow-hidden text-ellipsis break-all
+           [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical];
   }
 
+  /* ── Feed row hover ── */
   .hover-card {
-    @apply hover:bg-black/[0.03] focus-visible:bg-black/[0.03] dark:hover:bg-white/[0.03]
-           dark:focus-visible:bg-white/[0.03];
+    @apply hover:bg-black/[0.025] focus-visible:bg-black/[0.025]
+           dark:hover:bg-white/[0.025] dark:focus-visible:bg-white/[0.025];
   }
 
+  /* ── Dropdown / popover container ── */
   .menu-container {
-    @apply z-10 rounded-2xl bg-main-background outline-none 
-           [box-shadow:#f59e0b22_0px_0px_20px,_#f59e0b11_0px_0px_4px_1px] 
-           dark:[box-shadow:#f59e0b22_0px_0px_20px,_#f59e0b11_0px_0px_4px_1px];
+    @apply z-10 rounded-2xl bg-main-background outline-none border border-dark-border/60
+           shadow-[0_8px_32px_rgba(1,105,111,0.12),0_2px_8px_rgba(0,0,0,0.4)]
+           dark:shadow-[0_8px_32px_rgba(1,105,111,0.15),0_2px_8px_rgba(0,0,0,0.6)];
+  }
+
+  /* ── Post / feed card ── */
+  .post-card {
+    @apply relative flex flex-col gap-y-4 px-4 py-4 outline-none
+           border border-transparent transition-all duration-200
+           hover:border-dark-border/50 hover:bg-white/[0.015]
+           dark:hover:border-dark-border/50 dark:hover:bg-white/[0.02]
+           rounded-xl mx-2 my-1;
+  }
+
+  /* Bottom-bordered variant (timeline separator) */
+  .post-card-bordered {
+    @apply post-card rounded-none mx-0 my-0
+           border-b border-light-border/60 dark:border-dark-border/60
+           hover:rounded-none hover:mx-0 hover:border-x-transparent;
+  }
+
+  /* ── Stat/KPI card ── */
+  .stat-card {
+    @apply rounded-2xl border border-dark-border/60 bg-main-background p-4
+           dark:border-dark-border dark:bg-dim-background;
+  }
+
+  /* ── Primary CTA button ── */
+  .btn-primary {
+    @apply rounded-xl bg-main-accent px-5 py-2.5 text-base font-semibold text-white
+           transition-all duration-150 hover:brightness-110 active:scale-[0.97]
+           focus-visible:ring-2 focus-visible:ring-main-accent/50 outline-none;
+  }
+
+  /* ── Secondary/ghost button ── */
+  .btn-secondary {
+    @apply rounded-xl border border-main-accent px-5 py-2.5 text-base font-semibold
+           text-main-accent transition-all duration-150
+           hover:bg-main-accent/10 active:scale-[0.97] outline-none;
+  }
+
+  /* ── Active nav indicator pill ── */
+  .nav-active-pill {
+    @apply relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2
+           before:h-5/6 before:w-[3px] before:rounded-r-full before:bg-main-accent;
   }
 }

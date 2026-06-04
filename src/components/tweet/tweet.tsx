@@ -28,9 +28,9 @@ export type TweetProps = Tweet & {
 };
 
 export const variants: Variants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.8 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } }
+  initial: { opacity: 0, y: 4 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.18, ease: 'easeOut' } },
+  exit: { opacity: 0, transition: { duration: 0.15 } }
 };
 
 export function Tweet(tweet: TweetProps): JSX.Element {
@@ -93,11 +93,12 @@ export function Tweet(tweet: TweetProps): JSX.Element {
       <Link href={tweetLink} scroll={!reply}>
         <a
           className={cn(
-            `accent-tab hover-card relative flex flex-col 
-             gap-y-4 px-4 py-3 outline-none duration-200`,
+            `accent-tab relative flex flex-col gap-y-3 outline-none
+             px-4 py-4 transition-all duration-200
+             hover:bg-main-accent/[0.04] dark:hover:bg-main-accent/[0.04]`,
             parentTweet
               ? 'mt-0.5 pt-2.5 pb-0'
-              : 'border-b border-light-border dark:border-dark-border'
+              : 'border-b border-light-border/50 dark:border-dark-border/60'
           )}
           draggable={false}
           onClick={delayScroll(200)}
@@ -122,10 +123,16 @@ export function Tweet(tweet: TweetProps): JSX.Element {
             </AnimatePresence>
             <div className='flex flex-col items-center gap-2'>
               <UserTooltip avatar modal={modal} {...tweetUserData}>
-                <UserAvatar src={photoURL} alt={name} username={username} />
+                {/* shape='square' = rounded-lg avatar, distinct from Twitter's circle */}
+                <UserAvatar
+                  src={photoURL}
+                  alt={name}
+                  username={username}
+                  shape='square'
+                />
               </UserTooltip>
               {parentTweet && (
-                <i className='hover-animation h-full w-0.5 bg-light-line-reply dark:bg-dark-line-reply' />
+                <i className='hover-animation h-full w-0.5 bg-light-line-reply/60 dark:bg-dark-line-reply/60 rounded-full' />
               )}
             </div>
             <div className='flex min-w-0 flex-col'>
@@ -174,7 +181,9 @@ export function Tweet(tweet: TweetProps): JSX.Element {
                 </p>
               )}
               {text && (
-                <p className='whitespace-pre-line break-words'>{text}</p>
+                <p className='whitespace-pre-line break-words text-[1rem] leading-[1.55] text-light-primary dark:text-dark-primary'>
+                  {text}
+                </p>
               )}
               <div className='mt-1 flex flex-col gap-2'>
                 {images && (

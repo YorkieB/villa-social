@@ -27,10 +27,10 @@ function setInitialTheme(): Theme {
 }
 
 function setInitialAccent(): Accent {
-  if (typeof window === 'undefined') return 'yellow';
+  if (typeof window === 'undefined') return 'teal';
   const savedAccent = localStorage.getItem('accent') as Accent | null;
-  // Villa defaults to amber/yellow
-  return savedAccent ?? 'yellow';
+  // Villa v2 defaults to teal — Villa's primary brand accent
+  return savedAccent ?? 'teal';
 }
 
 export function ThemeContextProvider({

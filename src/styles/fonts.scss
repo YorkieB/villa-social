@@ -1,1 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* ── Satoshi — Villa's primary typeface (Fontshare) ───────── */
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,900&display=swap');
+
+/* Legacy Chirp woff2 kept for backwards-compat during migration
+   (not actively used once Satoshi loads)                        */
+@font-face {
+  font-family: 'chirp-legacy';
+  src: url('/fonts/chirp-regular-web.woff2') format('woff2'),
+       url('/fonts/chirp-regular-web.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+}

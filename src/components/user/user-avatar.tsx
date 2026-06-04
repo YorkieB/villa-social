@@ -8,6 +8,8 @@ type UserAvatarProps = {
   size?: number;
   username?: string;
   className?: string;
+  /** Shape of the avatar. 'square' = rounded-lg (Villa default), 'circle' = rounded-full (legacy) */
+  shape?: 'square' | 'circle';
 };
 
 export function UserAvatar({
@@ -15,9 +17,11 @@ export function UserAvatar({
   alt,
   size,
   username,
-  className
+  className,
+  shape = 'square'
 }: UserAvatarProps): JSX.Element {
   const pictureSize = size ?? 48;
+  const imgRadius = shape === 'circle' ? 'rounded-full' : 'rounded-lg';
 
   return (
     <Link href={username ? `/user/${username}` : '#'}>
@@ -31,7 +35,7 @@ export function UserAvatar({
       >
         <NextImage
           useSkeleton
-          imgClassName='rounded-full'
+          imgClassName={imgRadius}
           width={pictureSize}
           height={pictureSize}
           src={src}

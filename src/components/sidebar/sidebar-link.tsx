@@ -24,31 +24,43 @@ export function SidebarLink({
     <Link href={href}>
       <a
         className={cn(
-          'group py-1 outline-none',
+          'group py-0.5 outline-none',
           canBeHidden ? 'hidden xs:flex' : 'flex',
-          disabled && 'cursor-not-allowed'
+          disabled && 'cursor-not-allowed opacity-50'
         )}
         onClick={disabled ? preventBubbling() : undefined}
       >
         <div
           className={cn(
-            `custom-button flex items-center justify-center gap-4 self-start p-2 text-xl transition 
-             duration-200 group-hover:bg-light-primary/10 group-focus-visible:ring-2 
-             group-focus-visible:ring-[#878a8c] dark:group-hover:bg-dark-primary/10 
-             dark:group-focus-visible:ring-white xs:p-3 xl:pr-5`,
-            isActive && 'font-bold'
+            `relative flex items-center justify-center gap-4 self-start
+             rounded-xl px-3 py-2.5 text-[1.0625rem] leading-none transition-all duration-200
+             xs:w-full xl:w-full xl:pr-6
+             group-hover:bg-main-accent/10 dark:group-hover:bg-main-accent/10
+             group-focus-visible:ring-2 group-focus-visible:ring-main-accent/40`,
+            isActive
+              ? 'font-semibold text-main-accent'
+              : 'font-medium text-light-primary dark:text-dark-primary'
           )}
         >
+          {/* Teal left-bar indicator on active */}
+          {isActive && (
+            <span
+              className='absolute left-0 top-1/2 -translate-y-1/2 h-5/6 w-[3px]
+                         rounded-r-full bg-main-accent'
+              aria-hidden='true'
+            />
+          )}
+
           <HeroIcon
             className={cn(
-              'h-7 w-7',
-              isActive &&
-                ['Explore', 'Lists'].includes(linkName) &&
-                'stroke-white'
+              'h-6 w-6 shrink-0',
+              isActive ? 'text-main-accent' : 'text-light-primary dark:text-dark-primary'
             )}
             iconName={iconName}
             solid={isActive}
           />
+
+          {/* Label: always visible on xl, hidden on small sidebar */}
           <p className='hidden xl:block'>{linkName}</p>
         </div>
       </a>

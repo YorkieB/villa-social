@@ -15,7 +15,9 @@ const themes: Readonly<[Theme, string][]> = [
   ['dark', 'Lights out']
 ];
 
+// 'teal' is Villa's default and listed first
 const accentsColor: Readonly<Accent[]> = [
+  'teal',
   'blue',
   'yellow',
   'pink',

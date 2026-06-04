@@ -4,7 +4,7 @@ import { useWindow } from '@lib/context/window-context';
 import { useModal } from '@lib/hooks/useModal';
 import { Modal } from '@components/modal/modal';
 import { Input } from '@components/input/input';
-import { CustomIcon } from '@components/ui/custom-icon';
+import { VillaLogo } from '@components/ui/villa-logo';
 import { Button } from '@components/ui/button';
 import { SidebarLink } from './sidebar-link';
 import { MoreSettings } from './more-settings';
@@ -28,7 +28,7 @@ const navLinks: Readonly<NavLink[]> = [
   {
     href: '/explore',
     linkName: 'Explore',
-    iconName: 'HashtagIcon',
+    iconName: 'MagnifyingGlassIcon',
     disabled: true,
     canBeHidden: true
   },
@@ -61,16 +61,14 @@ const navLinks: Readonly<NavLink[]> = [
 export function Sidebar(): JSX.Element {
   const { user } = useAuth();
   const { isMobile } = useWindow();
-
   const { open, openModal, closeModal } = useModal();
-
   const username = user?.username as string;
 
   return (
     <header
       id='sidebar'
       className='flex w-0 shrink-0 transition-opacity duration-200 xs:w-20 md:w-24
-                 lg:max-w-none xl:-mr-4 xl:w-full xl:max-w-xs xl:justify-end'
+                 lg:max-w-none xl:-mr-4 xl:w-full xl:max-w-[280px] xl:justify-end'
     >
       <Modal
         className='flex items-start justify-center'
@@ -80,24 +78,37 @@ export function Sidebar(): JSX.Element {
       >
         <Input modal closeModal={closeModal} />
       </Modal>
+
       <div
-        className='fixed bottom-0 z-10 flex w-full flex-col justify-between border-t border-light-border 
-                   bg-main-background py-0 dark:border-dark-border xs:top-0 xs:h-full xs:w-auto xs:border-0 
-                   xs:bg-transparent xs:px-2 xs:py-3 xs:pt-2 md:px-4 xl:w-72'
+        className='fixed bottom-0 z-10 flex w-full flex-col justify-between
+                   border-t border-light-border/60 bg-main-sidebar-background py-0
+                   dark:border-dark-border/60 dark:bg-main-sidebar-background
+                   xs:top-0 xs:h-full xs:w-auto xs:border-0 xs:border-r
+                   xs:border-light-border/40 dark:xs:border-dark-border/40
+                   xs:bg-main-sidebar-background xs:px-3 xs:py-4
+                   xl:w-[280px] xl:px-4'
       >
-        <section className='flex flex-col justify-center gap-2 xs:items-center xl:items-stretch'>
-          <h1 className='hidden xs:flex'>
+        {/* ── Logo ── */}
+        <section className='flex flex-col gap-1 xs:items-center xl:items-stretch'>
+          <h1 className='hidden xs:flex mb-2 xl:mb-4'>
             <Link href='/home'>
               <a
-                className='custom-button main-tab text-amber-500 transition hover:bg-light-primary/10 
-                           focus-visible:bg-main-accent/10 focus-visible:!ring-main-accent/80
-                           dark:text-amber-500 dark:hover:bg-dark-primary/10'
+                className='group flex items-center gap-3 rounded-xl px-3 py-2.5
+                           transition-colors duration-200
+                           hover:bg-main-accent/10 focus-visible:bg-main-accent/10
+                           focus-visible:ring-2 focus-visible:ring-main-accent/40 outline-none'
               >
-                <CustomIcon className='h-7 w-7' iconName='TwitterIcon' />
+                <VillaLogo className='h-7 w-7 text-main-accent' />
+                <span className='hidden xl:block text-xl font-bold tracking-tight
+                                 text-light-primary dark:text-dark-primary'>
+                  Villa
+                </span>
               </a>
             </Link>
           </h1>
-          <nav className='flex items-center justify-around xs:flex-col xs:justify-center xl:block'>
+
+          {/* ── Nav ── */}
+          <nav className='flex items-center justify-around xs:flex-col xs:justify-center xl:block xl:space-y-0.5'>
             {navLinks.map(({ ...linkData }) => (
               <SidebarLink {...linkData} key={linkData.href} />
             ))}
@@ -109,19 +120,20 @@ export function Sidebar(): JSX.Element {
             />
             {!isMobile && <MoreSettings />}
           </nav>
+
+          {/* ── Post CTA ── */}
           <Button
-            className='accent-tab absolute right-4 -translate-y-[72px] bg-main-accent text-lg font-bold text-white
-                       outline-none transition hover:brightness-90 active:brightness-75 xs:static xs:translate-y-0
-                       xs:hover:bg-main-accent/90 xs:active:bg-main-accent/75 xl:w-11/12'
+            className='btn-primary mt-3 w-full text-center outline-none
+                       xs:mt-2 xs:p-3 xl:mt-4
+                       absolute right-4 bottom-20 w-auto xs:static xs:w-auto xl:w-full'
             onClick={openModal}
           >
-            <CustomIcon
-              className='block h-6 w-6 xl:hidden'
-              iconName='FeatherIcon'
-            />
-            <p className='hidden xl:block'>Post</p>
+            {/* Icon-only on small sidebar */}
+            <span className='block xl:hidden text-lg'>+</span>
+            <span className='hidden xl:block font-semibold'>Post</span>
           </Button>
         </section>
+
         {!isMobile && <SidebarProfile />}
       </div>
     </header>
