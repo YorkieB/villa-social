@@ -24,8 +24,13 @@ jobs:
             echo "=== Fixing remote URL ==="
             git remote set-url origin git@github.com:YorkieB/villa-social.git
 
+            echo "=== Trusting GitHub host key ==="
+            mkdir -p ~/.ssh
+            ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+            chmod 600 ~/.ssh/known_hosts
+
             echo "=== Pulling latest code ==="
-            git pull origin main
+            GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no' git pull origin main
 
             echo "=== Installing deps ==="
             npm install --legacy-peer-deps
