@@ -15,10 +15,9 @@ const themes: Readonly<[Theme, string][]> = [
   ['dark', 'Lights out']
 ];
 
-// 'teal' is Villa's default and listed first
+// Teal is Villa's primary — blue removed (was Twitter blue)
 const accentsColor: Readonly<Accent[]> = [
   'teal',
-  'blue',
   'yellow',
   'pink',
   'purple',

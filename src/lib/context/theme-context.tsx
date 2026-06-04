@@ -19,19 +19,63 @@ type ThemeContextProviderProps = {
   children: ReactNode;
 };
 
+// ── Migration helpers ─────────────────────────────────────────────────────────
+// Villa v2: force all users onto dark + teal unless they have already
+// explicitly chosen a v2-era preference. We track this with a localStorage
+// flag 'villa_v2_migrated'. Once set, we respect their choice.
+
+const MIGRATION_KEY = 'villa_v2_migrated';
+
+/** Remap legacy accent values to Villa v2 equivalents */
+function migrateAccent(accent: Accent | null): Accent {
+  if (!accent) return 'teal';
+  // Blue was the old Twitter-style default — remap to teal
+  if (accent === 'blue') return 'teal';
+  return accent;
+}
+
+/** Remap legacy theme values — light → dark for first-time migration */
+function migrateTheme(theme: Theme | null): Theme {
+  if (!theme) return 'dark';
+  // Light was the old Twitter-style default — remap to dark
+  if (theme === 'light') return 'dark';
+  return theme;
+}
+
 function setInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'dark';
-  const savedTheme = localStorage.getItem('theme') as Theme | null;
-  // Villa defaults to dark — only override if user explicitly saved a preference
-  return savedTheme ?? 'dark';
+
+  // If already migrated, respect saved preference
+  if (localStorage.getItem(MIGRATION_KEY)) {
+    const saved = localStorage.getItem('theme') as Theme | null;
+    return saved ?? 'dark';
+  }
+
+  // First visit post-v2: migrate and mark done
+  const saved = localStorage.getItem('theme') as Theme | null;
+  const migrated = migrateTheme(saved);
+  localStorage.setItem('theme', migrated);
+  return migrated;
 }
 
 function setInitialAccent(): Accent {
   if (typeof window === 'undefined') return 'teal';
-  const savedAccent = localStorage.getItem('accent') as Accent | null;
-  // Villa v2 defaults to teal — Villa's primary brand accent
-  return savedAccent ?? 'teal';
+
+  // If already migrated, respect saved preference
+  if (localStorage.getItem(MIGRATION_KEY)) {
+    const saved = localStorage.getItem('accent') as Accent | null;
+    return saved ?? 'teal';
+  }
+
+  // First visit post-v2: migrate and mark done
+  const saved = localStorage.getItem('accent') as Accent | null;
+  const migrated = migrateAccent(saved);
+  localStorage.setItem('accent', migrated);
+  // Mark migration complete after both theme + accent are set
+  localStorage.setItem(MIGRATION_KEY, '1');
+  return migrated;
 }
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function ThemeContextProvider({
   children
@@ -42,12 +86,27 @@ export function ThemeContextProvider({
   const { user } = useAuth();
   const { id: userId, theme: userTheme, accent: userAccent } = user ?? {};
 
+  // Sync from Firebase — apply migration before trusting saved values
   useEffect(() => {
-    if (user && userTheme) setTheme(userTheme);
+    if (user && userTheme) {
+      const migrated = migrateTheme(userTheme);
+      setTheme(migrated);
+      // If migration changed the value, persist it back to Firebase
+      if (migrated !== userTheme) {
+        void updateUserTheme(user.id, { theme: migrated });
+      }
+    }
   }, [userId, userTheme]);
 
   useEffect(() => {
-    if (user && userAccent) setAccent(userAccent);
+    if (user && userAccent) {
+      const migrated = migrateAccent(userAccent);
+      setAccent(migrated);
+      // If migration changed the value, persist it back to Firebase
+      if (migrated !== userAccent) {
+        void updateUserTheme(user.id, { accent: migrated });
+      }
+    }
   }, [userId, userAccent]);
 
   useEffect(() => {

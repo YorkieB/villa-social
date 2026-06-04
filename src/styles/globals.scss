@@ -51,8 +51,9 @@
     /* ── Accent palette ── */
     --accent-teal: 1 105 111;             /* #01696F — Villa primary */
     --accent-teal-hover: 12 78 84;        /* #0C4E54 */
-    --accent-yellow: 217 132 8;           /* amber — legacy, kept for theme switcher */
-    --accent-blue: 29 155 240;
+    --accent-yellow: 217 132 8;           /* amber */
+    /* Blue remapped to a teal-adjacent value — no Twitter blue in Villa */
+    --accent-blue: 1 105 111;             /* aliased to teal — legacy blue removed */
     --accent-pink: 249 26 130;
     --accent-purple: 120 87 255;
     --accent-orange: 255 122 0;
