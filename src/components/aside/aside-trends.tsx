@@ -35,8 +35,18 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
     <section
       className={cn(
         !inTrendsPage &&
-          'hover-animation rounded-3xl bg-main-sidebar-background/60 backdrop-blur-md border border-light-border/40 dark:border-dark-border/40 shadow-card'
+          'hover-animation rounded-2xl bg-main-sidebar-background/50 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30 shadow-lg overflow-hidden'
       )}
+      style={
+        !inTrendsPage
+          ? {
+              background:
+                'rgba(var(--main-sidebar-background-rgb), 0.6)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)'
+            }
+          : undefined
+      }
     >
       {loading ? (
         <Loading />
