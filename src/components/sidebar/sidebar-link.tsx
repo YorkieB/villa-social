@@ -32,9 +32,8 @@ export function SidebarLink({
       >
         <div
           className={cn(
-            `relative flex items-center justify-center gap-4 self-start
-             rounded-xl px-3 py-2.5 text-[1.0625rem] leading-none transition-all duration-200
-             xs:w-full xl:w-full xl:pr-6
+            `relative flex items-center justify-center self-start
+             rounded-xl p-3 text-[1.0625rem] leading-none transition-all duration-200
              group-hover:bg-main-accent/10 dark:group-hover:bg-main-accent/10
              group-focus-visible:ring-2 group-focus-visible:ring-main-accent/40`,
             isActive
@@ -53,17 +52,19 @@ export function SidebarLink({
 
           <HeroIcon
             className={cn(
-              'h-6 w-6 shrink-0',
+              'h-7 w-7 shrink-0 transition-transform duration-200 group-hover:scale-110',
               isActive ? 'text-main-accent' : 'text-light-primary dark:text-dark-primary'
             )}
             iconName={iconName}
             solid={isActive}
           />
 
-          {/* Label: always visible on xl, hidden on small sidebar */}
-          <p className='hidden xl:block'>{linkName}</p>
+          {/* Label: Visually hidden for icon-only look, but readable by screen readers */}
+          <span className='sr-only'>{linkName}</span>
         </div>
       </a>
     </Link>
+  );
+}
   );
 }
