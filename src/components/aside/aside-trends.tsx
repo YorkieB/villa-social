@@ -26,12 +26,9 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
 
   const { trends, location } = data ?? {};
 
-  const handleLinkClick = (e: React.MouseEvent): void => {
-    e.preventDefault();
-  };
-
   const handleButtonClick = (e: React.MouseEvent): void => {
     e.stopPropagation();
+    e.preventDefault();
   };
 
   return (
@@ -55,44 +52,40 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
             <Link
               href={url}
               key={query}
-              className='hover-animation accent-tab hover-card relative
-                         flex flex-col gap-0.5'
-              onClick={handleLinkClick}
+              className='hover-animation accent-tab hover-card relative flex flex-col gap-0.5'
             >
-              <div className='absolute right-2 top-2'>
-                <Button
-                  className='hover-animation group relative p-2
-                             hover:bg-main-accent/10 focus-visible:bg-main-accent/20
-                             focus-visible:!ring-main-accent/80'
-                  onClick={handleButtonClick}
-                >
-                  <HeroIcon
-                    className='h-5 w-5 text-light-secondary group-hover:text-main-accent
-                               group-focus-visible:text-main-accent dark:text-dark-secondary'
-                    iconName='EllipsisHorizontalIcon'
-                  />
-                  <ToolTip tip='More' />
-                </Button>
-              </div>
-              <p className='text-sm text-light-secondary dark:text-dark-secondary'>
-                Trending{' '}
-                {location === 'Worldwide' || !location
-                  ? 'Worldwide'
-                  : `in ${location}`}
-              </p>
-              <p className='font-bold'>{name}</p>
-              {tweet_volume && (
+              <>
+                <div className='absolute right-2 top-2'>
+                  <Button
+                    className='hover-animation group relative p-2 hover:bg-main-accent/10 focus-visible:bg-main-accent/20 focus-visible:!ring-main-accent/80'
+                    onClick={handleButtonClick}
+                  >
+                    <HeroIcon
+                      className='h-5 w-5 text-light-secondary group-hover:text-main-accent group-focus-visible:text-main-accent dark:text-dark-secondary'
+                      iconName='EllipsisHorizontalIcon'
+                    />
+                    <ToolTip tip='More' />
+                  </Button>
+                </div>
                 <p className='text-sm text-light-secondary dark:text-dark-secondary'>
-                  {formatNumber(tweet_volume)} tweets
+                  Trending{' '}
+                  {location === 'Worldwide' || !location
+                    ? 'Worldwide'
+                    : `in ${location}`}
                 </p>
-              )}
+                <p className='font-bold'>{name}</p>
+                {tweet_volume && (
+                  <p className='text-sm text-light-secondary dark:text-dark-secondary'>
+                    {formatNumber(tweet_volume)} tweets
+                  </p>
+                )}
+              </>
             </Link>
           ))}
           {!inTrendsPage && (
             <Link
               href='/trends'
-              className='custom-button accent-tab hover-card block w-full rounded-2xl
-                         rounded-t-none text-center text-main-accent'
+              className='custom-button accent-tab hover-card block w-full rounded-2xl rounded-t-none text-center text-main-accent'
             >
               Show more
             </Link>
