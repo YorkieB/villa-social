@@ -30,9 +30,9 @@
     --dim-search-background: 38 37 35;    /* #262523 */
     --light-search-background: 239 238 235;
 
-    --dark-sidebar-background: 20 19 17;  /* #141311 */
-    --dim-sidebar-background: 25 24 22;   /* #191816 */
-    --light-sidebar-background: 251 250 248;
+    --dark-sidebar-background: 23 22 20 / 0%;     /* Clear backdrop bleed */
+--dim-sidebar-background: 28 27 25 / 0%;      /* Clear backdrop bleed */
+--light-sidebar-background: 247 246 242 / 0%; /* Clear backdrop bleed */
 
     /* ── Text ── */
     --dark-primary: 205 204 202;          /* #CDCCCA */
