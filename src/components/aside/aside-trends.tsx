@@ -26,6 +26,14 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
 
   const { trends, location } = data ?? {};
 
+  const handleLinkClick = (e: React.MouseEvent): void => {
+    e.preventDefault();
+  };
+
+  const handleButtonClick = (e: React.MouseEvent): void => {
+    e.stopPropagation();
+  };
+
   return (
     <section
       className={cn(
@@ -49,16 +57,14 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
               key={query}
               className='hover-animation accent-tab hover-card relative
                          flex flex-col gap-0.5'
-              onClick={(e): void => {
-                e.preventDefault();
-              }}
+              onClick={handleLinkClick}
             >
               <div className='absolute right-2 top-2'>
                 <Button
                   className='hover-animation group relative p-2
                              hover:bg-main-accent/10 focus-visible:bg-main-accent/20
                              focus-visible:!ring-main-accent/80'
-                  onClick={(e): void => e.stopPropagation()}
+                  onClick={handleButtonClick}
                 >
                   <HeroIcon
                     className='h-5 w-5 text-light-secondary group-hover:text-main-accent
