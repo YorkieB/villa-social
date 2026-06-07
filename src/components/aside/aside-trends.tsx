@@ -33,21 +33,19 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
 
   return (
     <section
-      className={cn(
-        !inTrendsPage &&
-          'hover-animation rounded-2xl bg-main-sidebar-background/50 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30 shadow-lg overflow-hidden'
-      )}
-      style={
-        !inTrendsPage
-          ? {
-              background:
-                'rgba(var(--main-sidebar-background-rgb), 0.6)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)'
-            }
-          : undefined
-      }
-    >
+  className={cn(!inTrendsPage && 'hover-animation rounded-2xl overflow-hidden')}
+  style={
+    !inTrendsPage
+      ? {
+          background: 'rgba(30, 30, 30, 0.6)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255, 255, 255, 0.125)',
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+        }
+      : undefined
+  }
+>
       {loading ? (
         <Loading />
       ) : trends ? (
