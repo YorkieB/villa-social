@@ -32,7 +32,7 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
     <section
       className={cn(
         !inTrendsPage &&
-          'hover-animation rounded-2xl bg-main-sidebar-background'
+          'hover-animation rounded-3xl bg-main-sidebar-background/60 backdrop-blur-md border border-light-border/40 dark:border-dark-border/40 shadow-card'
       )}
     >
       {loading ? (
